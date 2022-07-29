@@ -6,7 +6,7 @@ dotenv.config();
 const app=express();
 app.use(express.json());
 const Mongo_URL=process.env.Mongo_URL;
-const PORT=5000;
+const PORT=process.env.PORT;
 
 
    
