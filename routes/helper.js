@@ -1,10 +1,11 @@
+import { ObjectId } from 'mongodb';
 import { Client } from '../index.js  ';
 
 export async function UpdateMovieById(id, data) {
     return await Client
         .db("Onstream-db")
         .collection("movies")
-        .updateOne({ id: id }, { $set: data });
+        .updateOne({ _id: ObjectId(id) }, { $set: data });
 }
 export async function newFunction(data) {
     return await Client
@@ -16,13 +17,13 @@ export async function GetMovieById(id) {
     return await Client
         .db("Onstream-db")
         .collection("movies")
-        .findOne({ id: id });
+        .findOne({ _id: ObjectId(id) });
 }
 export async function DeleteMovieById(id) {
     return await Client
         .db("Onstream-db")
         .collection("movies")
-        .deleteOne({ id: id });
+        .deleteOne({ _id: ObjectId(id) });
 }
 export async function GetAllMovies(request) {
     return await Client
