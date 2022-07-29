@@ -1,5 +1,5 @@
 import express from 'express';
-import {Client} from '../index.js  ';
+import { GetAllMovies, DeleteMovieById, GetMovieById, newFunction, UpdateMovieById } from './helper.js';
 const router=express.Router();
 
 
@@ -10,17 +10,17 @@ router.get("/",async function(request,response){
         request.query.rating=+request.query.rating;
     }
     console.log(request.query)
-    const movies=await Client.db("Onstream-db").collection("movies").find(request.query).toArray();
+    const movies=await GetAllMovies(request);
     // console.log(movies);
     response.send(movies);
 });
 
 //DELETE Movie with id
-router.delete(":id",async function(request,response){
+router.delete("/:id",async function(request,response){
     const {id}=request.params;
     console.log(request.params,id);
     //db.collection.find({id:id})
-    const result=await Client.db("Onstream-db").collection("movies").deleteOne({id:id});
+    const result=await DeleteMovieById(id);
     // const movie=movies.find((mv)=>mv.id===id);
     console.log(result);
 
@@ -32,7 +32,7 @@ router.get("/:id",async function(request,response){
     const {id}=request.params;
     console.log(request.params,id);
     //db.collection.find({id:id})
-    const movie=await Client.db("Onstream-db").collection("movies").findOne({id:id});
+    const movie=await GetMovieById(id);
     // const movie=movies.find((mv)=>mv.id===id);
     console.log(movie);
 
@@ -40,11 +40,11 @@ router.get("/:id",async function(request,response){
 });
 
 //Create Movies 
-router.post("", async function(request,response){
+router.post("/", async function(request,response){
     const data=request.body;
     console.log(data);
     //db.movies.insertMany(data)
-    const result=await Client.db("Onstream-db").collection("movies").insertMany(data);
+    const result=await newFunction(data);
     // const movie=movies.find((mv)=>mv.id===id);
 
     response.send(result);
@@ -56,7 +56,7 @@ router.put("/:id",async function(request,response){
     console.log(request.params,id);
     const data=request.body;
     //db.collection.UpdateOne({id:id},{$set:data})
-    const result=await Client.db("Onstream-db").collection("movies").updateOne({id:id},{$set:data});
+    const result=await UpdateMovieById(id, data);
     
     console.log(result);
 
@@ -64,3 +64,5 @@ router.put("/:id",async function(request,response){
 });
 
 export const moviesRouter=router;
+
+
