@@ -18,6 +18,8 @@ const PORT=process.env.PORT;
     return Client;
    }
    const Client=await createConnection();
+
+   //Welcome Response
 app.get("/",function(request,response){
     response.send("Welcome to Onstream");
 });
@@ -69,4 +71,16 @@ app.post("/movies", async function(request,response){
     response.send(result);
 });
 
+//Update Movie By ID
+app.put("/movies/:id",async function(request,response){
+    const {id}=request.params;
+    console.log(request.params,id);
+    const data=request.body;
+    //db.collection.UpdateOne({id:id},{$set:data})
+    const result=await Client.db("Onstream-db").collection("movies").updateOne({id:id},{$set:data});
+    
+    console.log(result);
+
+    response.send(result);
+});
 app.listen(PORT,()=>console.log(`App started in ${PORT}`));
