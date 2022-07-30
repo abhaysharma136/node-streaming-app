@@ -7,7 +7,7 @@ export async function UpdateMovieById(id, data) {
         .collection("movies")
         .updateOne({ _id: ObjectId(id) }, { $set: data });
 }
-export async function newFunction(data) {
+export async function CreateMovies(data) {
     return await Client
         .db("Onstream-db")
         .collection("movies")
@@ -31,4 +31,11 @@ export async function GetAllMovies(request) {
         .collection("movies")
         .find(request.query)
         .toArray();
+}
+
+export async function CreateUser(data) {
+    return await Client
+        .db("Onstream-db")
+        .collection("users")
+        .insertOne(data);
 }
