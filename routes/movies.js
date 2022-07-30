@@ -1,10 +1,11 @@
 import express from 'express';
+import { auth } from '../middleware/auth.js';
 import { GetAllMovies, DeleteMovieById, GetMovieById, CreateMovies, UpdateMovieById } from './helper.js';
 const router=express.Router();
 
 
 //GET all Movies
-router.get("/",async function(request,response){
+router.get("/",auth,async function(request,response){
     //Get movie with name,rating
     if(request.query.rating){
         request.query.rating=+request.query.rating;
@@ -28,7 +29,7 @@ router.delete("/:id",async function(request,response){
 });
 
 //Get Movie By Id
-router.get("/:id",async function(request,response){
+router.get("/:id",auth,async function(request,response){
     const {id}=request.params;
     console.log(request.params,id);
     //db.collection.find({id:id})
