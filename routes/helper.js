@@ -39,3 +39,10 @@ export async function CreateUser(data) {
         .collection("users")
         .insertOne(data);
 }
+
+export async function getUserByname(username) {
+    return await Client
+        .db("Onstream-db")
+        .collection("users")
+        .findOne({username:username});
+}
