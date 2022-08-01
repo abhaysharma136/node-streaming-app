@@ -1,5 +1,5 @@
 import express from 'express';
-import { CreateUser, getUserByname } from './helper.js';
+import { CreateUser, GetUserById, getUserByname, UpdateUserById } from './helper.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 const router=express.Router();
@@ -15,20 +15,22 @@ async function genHashedpassword(password){
 
 //Create User 
 router.post("/signup", async function(request,response){
-    const {username,password}=request.body;
+    const {email,password,FirstName,LastName}=request.body;
 
-    const UserFromDB=await getUserByname(username);
+    const UserFromDB=await getUserByname(email);
     console.log(UserFromDB);
     if(UserFromDB){
-        response.status(400).send({message:"username allready exists"});
+        response.status(400).send({message:"email allready exists"});
     }else if(password.length<8){
         response.send({message:"password must be atleast 8 characters"});
     }else{const hashedPassword=await genHashedpassword(password);
         console.log(hashedPassword);
         //db.movies.insertOne(data)
         const result=await CreateUser({
-            username:username,
+            email:email,
             password:hashedPassword,
+            FirstName:FirstName,
+            LastName:LastName,
         });
        
     
@@ -38,12 +40,12 @@ router.post("/signup", async function(request,response){
 });
 
 router.post("/login", async function(request,response){
-    const {username,password}=request.body;
+    const {email,password}=request.body;
 
-    const UserFromDB=await getUserByname(username);
+    const UserFromDB=await getUserByname(email);
     console.log(UserFromDB);
     if(!UserFromDB){
-        response.status(400).send({message:"Invalid Credentials"});
+        response.status(400).send({message:"email does not match"});
     }else
     {
        const storedpassword=UserFromDB.password;
@@ -51,13 +53,38 @@ router.post("/login", async function(request,response){
        console.log(isPasswordMatch);
        if(isPasswordMatch){
         const token=jwt.sign({id:UserFromDB._id},process.env.SECRET_KEY);
-        response.send({message:"Succesfull Login",token:token});
+        response.send({message:"Succesfull Login",token:token,id:UserFromDB._id});
        }
        else{
         response.status(401).send({message:"Invalid Credentials"});
        }
     }
     
+});
+
+//Get User Data from Id
+router.get("/:id",async function(request,response){
+    const {id}=request.params;
+    console.log(request.params,id);
+    //db.collection.find({id:id})
+    const user=await GetUserById(id);
+    // const movie=movies.find((mv)=>mv.id===id);
+    console.log(user);
+
+    user?response.send(user):response.status(404).send({message:"User not Found"});
+});
+
+//Update User profile By ID
+router.put("/:id",async function(request,response){
+    const {id}=request.params;
+    console.log(request.params,id);
+    const data=request.body;
+    //db.collection.UpdateOne({id:id},{$set:data})
+    const result=await UpdateUserById(id, data);
+    
+    console.log(result);
+
+    response.send(result);
 });
 
 export const usersRouter=router;

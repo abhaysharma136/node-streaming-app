@@ -40,9 +40,23 @@ export async function CreateUser(data) {
         .insertOne(data);
 }
 
-export async function getUserByname(username) {
+export async function getUserByname(email) {
     return await Client
         .db("Onstream-db")
         .collection("users")
-        .findOne({username:username});
+        .findOne({email:email});
+}
+
+export async function GetUserById(id) {
+    return await Client
+        .db("Onstream-db")
+        .collection("users")
+        .findOne({ _id: ObjectId(id) });
+}
+
+export async function UpdateUserById(id, data) {
+    return await Client
+        .db("Onstream-db")
+        .collection("users")
+        .updateOne({ _id: ObjectId(id) }, { $set: data });
 }

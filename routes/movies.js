@@ -5,7 +5,7 @@ const router=express.Router();
 
 
 //GET all Movies
-router.get("/",auth,async function(request,response){
+router.get("/",async function(request,response){
     //Get movie with name,rating
     if(request.query.rating){
         request.query.rating=+request.query.rating;
@@ -29,7 +29,7 @@ router.delete("/:id",async function(request,response){
 });
 
 //Get Movie By Id
-router.get("/:id",auth,async function(request,response){
+router.get("/:id",async function(request,response){
     const {id}=request.params;
     console.log(request.params,id);
     //db.collection.find({id:id})
