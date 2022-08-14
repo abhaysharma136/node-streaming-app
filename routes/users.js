@@ -63,7 +63,7 @@ router.post("/login", async function(request,response){
 });
 
 router.post("/forgotPassword", async function(request,response){
-    const {email,password}=request.body;
+    const {email}=request.body;
 
     const UserFromDB=await getUserByname(email);
     console.log(UserFromDB);
