@@ -32,7 +32,7 @@ router.post("/signup", async function(request,response){
             FirstName:FirstName,
             LastName:LastName,
         });
-       
+
     
         response.send(result);
     }
