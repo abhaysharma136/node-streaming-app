@@ -62,21 +62,21 @@ router.post("/login", async function(request,response){
     
 });
 
-router.post("/forgotPassword", async function(request,response){
-    const {email}=request.body;
+// router.post("/forgotPassword", async function(request,response){
+//     const {email}=request.body;
 
-    const UserFromDB=await getUserByname(email);
-    console.log(UserFromDB);
-    if(!UserFromDB){
-        response.status(400).send({message:"email not found "});
-    }else
-    {
+//     const UserFromDB=await getUserByname(email);
+//     console.log(UserFromDB);
+//     if(!UserFromDB){
+//         response.status(400).send({message:"email not found "});
+//     }else
+//     {
        
-        response.status(401).send({message:"email Sent"});
+//         response.status(401).send({message:"email Sent"});
        
-    }
+//     }
     
-});
+// });
 //Get User Data from Id
 router.get("/:id",async function(request,response){
     const {id}=request.params;
