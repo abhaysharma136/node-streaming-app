@@ -2,12 +2,9 @@ import express from 'express';
 import { CreateUser, GetUserById, getUserByname, UpdateUserById } from './helper.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import cors from 'cors';
-
 const router=express.Router();
-const app=express();
-app.use(express.json());
-app.use(cors());
+
+
 async function genHashedpassword(password){
     const NO_OF_ROUND=10;
     const salt=await bcrypt.genSalt(NO_OF_ROUND);
