@@ -53,7 +53,7 @@ router.post("/login", async function(request,response){
        console.log(isPasswordMatch);
        if(isPasswordMatch){
         const token=jwt.sign({id:UserFromDB._id},process.env.SECRET_KEY);
-        response.send({message:"Succesfull Login",token:token,id:UserFromDB._id});
+        response.send({message:"Succesfull Login",id:UserFromDB._id});
        }
        else{
         response.status(401).send({message:"Invalid Credentials"});
