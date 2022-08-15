@@ -52,8 +52,8 @@ router.post("/login", async function(request,response){
        const isPasswordMatch=await bcrypt.compare(password,storedpassword);
        console.log(isPasswordMatch);
        if(isPasswordMatch){
-        const token=jwt.sign({id:UserFromDB._id},process.env.SECRET_KEY);
-        response.send({message:"Succesfull Login",token:token,id:UserFromDB._id});
+        // const token=jwt.sign({id:UserFromDB._id},process.env.SECRET_KEY);
+        response.send({message:"Succesfull Login"});
        }
        else{
         response.status(401).send({message:"Invalid Credentials"});
