@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { moviesRouter } from "./routes/movies.js";
 import cors from 'cors';
 import { usersRouter } from "./routes/users.js";
+import { emailRouter} from "./routes/sentmail.js";
 
 dotenv.config();
 const app=express();
@@ -27,4 +28,7 @@ app.get("/",function(request,response){
 
 app.use("/movies",moviesRouter);
 app.use("/users",usersRouter);
+app.use("/email",emailRouter);
 app.listen(PORT,()=>console.log(`App started in ${PORT}`));
+
+
