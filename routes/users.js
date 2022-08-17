@@ -51,13 +51,25 @@ router.post("/login", async function(request,response){
        const storedpassword=UserFromDB.password;
        const isPasswordMatch=await bcrypt.compare(password,storedpassword);
        console.log(isPasswordMatch);
-       if(isPasswordMatch){
-        const token=jwt.sign({id:UserFromDB._id},process.env.SECRET_KEY);
-        response.send({message:"Succesfull Login",token:token,id:UserFromDB._id});
+       if(email==="abhaysharmajr@gmail.com"){
+        if(isPasswordMatch){
+            const token=jwt.sign({id:UserFromDB._id},process.env.SECRET_KEY);
+            response.send({message:"Succesfull Admin Login",token:token,id:UserFromDB._id});
+           }
+           else{
+            response.status(401).send({message:"Invalid Credentials"});
+           }
        }
        else{
-        response.status(401).send({message:"Invalid Credentials"});
+        if(isPasswordMatch){
+            const token=jwt.sign({id:UserFromDB._id},process.env.SECRET_KEY);
+            response.send({message:"Succesfull Login",token:token,id:UserFromDB._id});
+           }
+           else{
+            response.status(401).send({message:"Invalid Credentials"});
+           }
        }
+       
     }
     
 });
