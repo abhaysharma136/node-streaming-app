@@ -5,15 +5,15 @@ import nodemailer from 'nodemailer';
    export async function sentEmail(receiver){
     var receiver=receiver;
     var transporter=nodemailer.createTransport({
-        service:process.env.SERVICE,
+        service:'gmail',
         auth:{
-            user:process.env.HOST,
+            user:'abhaysharmajr@gmail.com',
             pass:process.env.PASS
         }
     });
     
     var mailOptions={
-        from:process.env.HOST,
+        from:'abhaysharmajr@gmail.com',
         to:receiver,
         subject:'password change Email with Link',
         text:'Password sent to Abhay Sharma',
