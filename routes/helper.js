@@ -13,6 +13,13 @@ export async function CreateMovies(data) {
         .collection("movies")
         .insertMany(data);
 }
+export async function CreateMovie(data) {
+    return await Client
+        .db("Onstream-db")
+        .collection("movies")
+        .insertOne(data);
+}
+
 export async function GetMovieById(id) {
     return await Client
         .db("Onstream-db")

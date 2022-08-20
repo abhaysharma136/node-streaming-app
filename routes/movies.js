@@ -1,6 +1,6 @@
 import express from 'express';
 import { auth } from '../middleware/auth.js';
-import { GetAllMovies, DeleteMovieById, GetMovieById, CreateMovies, UpdateMovieById } from './helper.js';
+import { GetAllMovies, DeleteMovieById, GetMovieById, CreateMovies, UpdateMovieById, CreateMovie } from './helper.js';
 const router=express.Router();
 
 
@@ -46,6 +46,17 @@ router.post("/", async function(request,response){
     console.log(data);
     //db.movies.insertMany(data)
     const result=await CreateMovies(data);
+    // const movie=movies.find((mv)=>mv.id===id);
+
+    response.send(result);
+});
+
+//Create Movie
+router.post("/add", async function(request,response){
+    const data=request.body;
+    console.log(data);
+    //db.movies.insertMany(data)
+    const result=await CreateMovie(data);
     // const movie=movies.find((mv)=>mv.id===id);
 
     response.send(result);
