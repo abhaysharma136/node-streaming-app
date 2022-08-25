@@ -114,6 +114,19 @@ router.put("/:id",async function(request,response){
     response.send(result);
 });
 
+//sent Registration email
+router.post("/newuser", async function(request,response){
+    const {email}=request.body;
+
+    const UserFromDB=await getUserByname(email);
+    console.log(UserFromDB);
+    if(UserFromDB){
+        response.status(400).send({message:"email allready exists"});
+    }else{
+        response.send({message:"Email Sent to registered Email"});
+    }
+});
+
 export const usersRouter=router;
 
 
