@@ -61,7 +61,7 @@ export async function sentRegistrationEmail(receiver){
         from:'abhaysharmajr@gmail.com',
         to:receiver,
         subject:'Onstream Registration Confirmation',
-        text:`Hi! There, You have recently visited our website and entered your email. Please follow the given link to verify your email below.   http://localhost:5000/email/verify/${token} Thanks`,
+        text:`Hi! There, You have recently visited our website and entered your email. Please follow the given link to verify your email below.   http://localhost:3000/Onstream/AccountConfirmation/${receiver}/${token} Thanks`,
         // html:"<p><a href=http://localhost:5000/email/verify/${token}></a></p>"
     }
     
@@ -88,11 +88,11 @@ router.get('/verify/:token',async function(request,response){
     jwt.verify(token,'ourSecretKey',function(err,decoded){
         if(err){
             console.log(err);
-            response.send("Email verification failed, possibly the link is invalid or expired");
+            response.send({message:"Email verification failed, possibly the link is invalid or expired"});
         }
         else{
             console.log("email succesfully Registered")
-            response.send("Email verified successfully");
+            response.send({message:"Email verified successfully"});
         }
     });
 });

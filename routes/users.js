@@ -1,7 +1,9 @@
 import express from 'express';
-import { CreateUser, GetUserById, getUserByname, UpdateUserById } from './helper.js';
+import { CreateUser, GetUserById, getUserByname, UpdateUserByEmail, UpdateUserById } from './helper.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { Client } from '../index.js  ';
+import { auth } from '../middleware/auth.js';
 const router=express.Router();
 
 
@@ -31,10 +33,9 @@ router.post("/signup", async function(request,response){
             password:hashedPassword,
             FirstName:FirstName,
             LastName:LastName,
+            confirm:false
         });
-
-    
-        response.send(result);
+        response.send({result,message:"Email Sent to registered Email"});
     }
     
 });
@@ -46,6 +47,8 @@ router.post("/login", async function(request,response){
     console.log(UserFromDB);
     if(!UserFromDB){
         response.status(400).send({message:"email does not match"});
+    }else if(UserFromDB.confirm===false){
+        response.status(400).send({message:"Account not Verified"})
     }else
     {
        const storedpassword=UserFromDB.password;
@@ -89,6 +92,23 @@ router.post("/forgotPassword", async function(request,response){
     }
     
 });
+
+
+//Account Status Confirm 
+router.put("/ConfirmAccount/:email", async function(request,response){
+    const {email}=request.params;
+
+    console.log(request.params,email);
+    const data=request.body;
+    //db.collection.UpdateOne({id:id},{$set:data})
+    const result=await UpdateUserByEmail(email, data);
+    
+    console.log(result);
+
+    response.send(result);
+    
+});
+
 //Get User Data from Id
 router.get("/:id",async function(request,response){
     const {id}=request.params;
@@ -99,6 +119,24 @@ router.get("/:id",async function(request,response){
     console.log(user);
 
     user?response.send(user):response.status(404).send({message:"User not Found"});
+});
+
+//GET USER COUNT
+router.get("/Count/All",auth,async function(request,response){
+    //Get movie with name,rating
+    
+    console.log(request.query)
+    const users=await Client.db("Onstream-db")
+    .collection("users").count(request.query,function(err,result){
+        if(err){
+            response.send(err)
+        }
+        else{
+            response.json(result)
+        }
+    });
+    
+    // response.status(404).sendStatus(movies);
 });
 
 //Update User profile By ID

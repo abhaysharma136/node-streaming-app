@@ -40,6 +40,11 @@ export async function GetAllMovies(request) {
         .toArray();
 }
 
+// export async function GetAllMoviesCount(request) {
+//     return await Client
+//         .db("Onstream-db")
+//         .collection("movies")
+// }
 export async function CreateUser(data) {
     return await Client
         .db("Onstream-db")
@@ -66,4 +71,11 @@ export async function UpdateUserById(id, data) {
         .db("Onstream-db")
         .collection("users")
         .updateOne({ _id: ObjectId(id) }, { $set: data });
+}
+
+export async function UpdateUserByEmail(email, data) {
+    return await Client
+        .db("Onstream-db")
+        .collection("users")
+        .updateOne({ email: email }, { $set: data });
 }

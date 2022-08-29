@@ -1,6 +1,7 @@
 import express from 'express';
 import { auth } from '../middleware/auth.js';
-import { GetAllMovies, DeleteMovieById, GetMovieById, CreateMovies, UpdateMovieById, CreateMovie } from './helper.js';
+import { GetAllMovies, DeleteMovieById, GetMovieById, CreateMovies, UpdateMovieById, CreateMovie} from './helper.js';
+import { Client } from '../index.js  ';
 const router=express.Router();
 
 
@@ -15,6 +16,27 @@ router.get("/",auth,async function(request,response){
     // console.log(movies);
     response.send(movies);
 });
+
+//GET all Movies Count
+router.get("/Count/All",auth,async function(request,response){
+    //Get movie with name,rating
+    if(request.query.rating){
+        request.query.rating=+request.query.rating;
+    }
+    console.log(request.query)
+    const movies=await Client.db("Onstream-db")
+    .collection("movies").count(request.query,function(err,result){
+        if(err){
+            response.send(err)
+        }
+        else{
+            response.json(result)
+        }
+    });
+    
+    // response.status(404).sendStatus(movies);
+});
+
 
 //DELETE Movie with id
 router.delete("/:id",async function(request,response){

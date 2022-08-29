@@ -29,6 +29,8 @@ app.get("/",function(request,response){
 app.use("/movies",moviesRouter);
 app.use("/users",usersRouter);
 app.use("/email",emailRouter);
+
+
 app.listen(PORT,()=>console.log(`App started in ${PORT}`));
 
 
