@@ -76,7 +76,7 @@ router.post("/login", async function(request,response){
     }
     
 });
-
+//Forgot Password
 router.post("/forgotPassword", async function(request,response){
     const {email}=request.body;
 
@@ -93,6 +93,22 @@ router.post("/forgotPassword", async function(request,response){
     
 });
 
+//Check if provided email Exists, allready verified or notverified
+router.post("/verfyaccountstatus", async function(request,response){
+    const {email}=request.body;
+
+    const UserFromDB=await getUserByname(email);
+    console.log(UserFromDB);
+    if(!UserFromDB){
+        response.status(400).send({message:"email not found!!. Please register first "});
+    }else if(UserFromDB.confirm===true){
+        response.status(400).send({message:"email is allready verified. Please Login! "});
+    }
+    else{
+        response.status(401).send({message:"email Sent"});  
+    }
+    
+});
 
 //Account Status Confirm 
 router.put("/ConfirmAccount/:email", async function(request,response){
