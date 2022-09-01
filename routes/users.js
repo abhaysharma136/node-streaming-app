@@ -84,11 +84,12 @@ router.post("/forgotPassword", async function(request,response){
     console.log(UserFromDB);
     if(!UserFromDB){
         response.status(400).send({message:"email not found "});
-    }else
+    }else if(UserFromDB.confirm===false){
+        response.status(400).send({message:"email is not verified. Please try to verrify first! "});
+    }
+    else
     {
-       
-        response.status(401).send({message:"email Sent"});
-       
+        response.status(401).send({message:"email Sent"});  
     }
     
 });
@@ -110,7 +111,7 @@ router.post("/verfyaccountstatus", async function(request,response){
     
 });
 
-//Account Status Confirm 
+//Update user data from Email 
 router.put("/ConfirmAccount/:email", async function(request,response){
     const {email}=request.params;
 
@@ -118,6 +119,25 @@ router.put("/ConfirmAccount/:email", async function(request,response){
     const data=request.body;
     //db.collection.UpdateOne({id:id},{$set:data})
     const result=await UpdateUserByEmail(email, data);
+    
+    console.log(result);
+
+    response.send(result);
+    
+});
+
+
+//Update user password from Email 
+router.put("/updatepassword/:email", async function(request,response){
+    const {email}=request.params;
+
+    console.log(request.params,email);
+    const {password}=request.body;
+    //db.collection.UpdateOne({id:id},{$set:data})
+    const hashedPassword=await genHashedpassword(password);
+    const result=await UpdateUserByEmail(email, {
+        password:hashedPassword
+    });
     
     console.log(result);
 

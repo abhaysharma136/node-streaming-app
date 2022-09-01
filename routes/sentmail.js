@@ -15,12 +15,18 @@ const router=express.Router();
         }
     });
     
+    const token=jwt.sign({
+        data:'Token Data'
+    }, 'ourSecretKey',{expiresIn:'10m'}
+    );
+
+
     var mailOptions={
         from:'abhaysharmajr@gmail.com',
         to:receiver,
         subject:'password change Email with Link',
-        text:'Password sent to Abhay Sharma',
-        html:'<p> You requested for reset password, kindly use this <a href="http://localhost:4000/reset-password?token=' + '">link</a> to reset your password</p>'
+        text:`Hi! There, You Forgot your password? We received a request to reset your password. Click on the link or Copy paste the URl in your browser.   http://localhost:3000/Onstream/forgotPassword/${receiver}/${token} The provided link will expire in 10 minutes. Thanks`,
+        // html:'<p> You requested for reset password, kindly use this <a href="http://localhost:4000/reset-password?token=' + '">link</a> to reset your password</p>'
     }
     
     transporter.sendMail(mailOptions,function(error,info){
@@ -73,6 +79,7 @@ export async function sentRegistrationEmail(receiver){
         }
     })
 }
+
 router.post("/RegisterConfirmation",async function(request,response){
     const data=request.body.email;
     console.log(data);
