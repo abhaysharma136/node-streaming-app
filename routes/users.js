@@ -1,5 +1,5 @@
 import express from 'express';
-import { CreateUser, GetUserById, getUserByname, UpdateUserByEmail, UpdateUserById } from './helper.js';
+import { CreateUser, GetAllUsers, GetUserById, getUserByname, UpdateUserByEmail, UpdateUserById } from './helper.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Client } from '../index.js  ';
@@ -14,6 +14,20 @@ async function genHashedpassword(password){
     console.log(salt,hashedPassord);
     return hashedPassord;
 }
+
+
+//GET ALL User
+router.get("/",async function(request,response){
+    //Get movie with name,rating
+    // if(request.query.rating){
+    //     request.query.rating=+request.query.rating;
+    // }
+    console.log(request.query)
+    const users=await GetAllUsers(request);
+    // console.log(movies);
+    response.send(users);
+});
+
 
 //Create User 
 router.post("/signup", async function(request,response){

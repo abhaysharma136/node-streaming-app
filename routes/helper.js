@@ -40,6 +40,22 @@ export async function GetAllMovies(request) {
         .toArray();
 }
 
+export async function GetLastMovies(request) {
+    return await Client
+        .db("Onstream-db")
+        .collection("movies")
+        .find(request.query).sort({$natural:-1}).limit(10)
+        .toArray();
+        db.yourcollectionname.find({$query: {}, $orderby: {$natural : -1}}).limit(yournumber)
+}
+
+export async function GetAllUsers(request) {
+    return await Client
+        .db("Onstream-db")
+        .collection("users")
+        .find(request.query)
+        .toArray();
+}
 // export async function GetAllMoviesCount(request) {
 //     return await Client
 //         .db("Onstream-db")
