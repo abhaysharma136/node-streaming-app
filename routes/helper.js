@@ -13,6 +13,14 @@ export async function CreateMovies(data) {
         .collection("movies")
         .insertMany(data);
 }
+
+export async function CreateBanners(data) {
+    return await Client
+        .db("Onstream-db")
+        .collection("banners")
+        .insertMany(data);
+}
+
 export async function CreateMovie(data) {
     return await Client
         .db("Onstream-db")
@@ -40,13 +48,31 @@ export async function GetAllMovies(request) {
         .toArray();
 }
 
+
+//Get Movies By Name
+export async function GetMoviesByName(name) {
+    return await Client
+        .db("Onstream-db")
+        .collection("movies")
+        .find({name:{ $regex:'.*'+name+'.*', $options:'i'} })
+        .toArray();
+}
+
+export async function GetAllBanners(request) {
+    return await Client
+        .db("Onstream-db")
+        .collection("banners")
+        .find({})
+        .toArray();
+}
+
 export async function GetLastMovies(request) {
     return await Client
         .db("Onstream-db")
         .collection("movies")
         .find(request.query).sort({$natural:-1}).limit(10)
         .toArray();
-        db.yourcollectionname.find({$query: {}, $orderby: {$natural : -1}}).limit(yournumber)
+        // db.yourcollectionname.find({$query: {}, $orderby: {$natural : -1}}).limit(yournumber)
 }
 
 export async function GetAllUsers(request) {

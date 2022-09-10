@@ -1,6 +1,6 @@
 import express from 'express';
 import { auth } from '../middleware/auth.js';
-import { GetAllMovies, DeleteMovieById, GetMovieById, CreateMovies, UpdateMovieById, CreateMovie, GetLastMovies} from './helper.js';
+import { GetAllMovies, DeleteMovieById, GetMovieById, CreateMovies, UpdateMovieById, CreateMovie, GetLastMovies, GetMoviesByName} from './helper.js';
 import { Client } from '../index.js  ';
 const router=express.Router();
 
@@ -17,7 +17,14 @@ router.get("/",auth,async function(request,response){
     response.send(movies);
 });
 
-
+//Search Movies Functionality
+router.get("/search/",auth,async function(request,response){
+    const {name}=request.query;
+    console.log(name);
+    const movies=await GetMoviesByName(name);
+    console.log(movies);
+    response.send(movies);
+});
 
 //GET LAST 10 Movies
 router.get("/last/10",auth,async function(request,response){
