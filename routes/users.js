@@ -1,5 +1,5 @@
 import express from 'express';
-import { CreateUser, GetAllUsers, GetUserById, getUserByname, UpdateUserByEmail, UpdateUserById } from './helper.js';
+import { CreateUser, DeleteuserById, GetAllUsers, GetUserById, getUserByname, UpdateUserByEmail, UpdateUserById } from './helper.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Client } from '../index.js  ';
@@ -213,6 +213,19 @@ router.post("/newuser", async function(request,response){
     }else{
         response.send({message:"Email Sent to registered Email"});
     }
+});
+
+
+//DELETE User with id
+router.delete("/:id",async function(request,response){
+    const {id}=request.params;
+    console.log(request.params,id);
+    //db.collection.find({id:id})
+    const result=await DeleteuserById(id);
+    // const movie=movies.find((mv)=>mv.id===id);
+    console.log(result);
+
+    result.deletedCount>0?response.send({"msg":"User Succesfully Deleted"}):response.status(404).send({"msg":"User not Found"});
 });
 
 export const usersRouter=router;

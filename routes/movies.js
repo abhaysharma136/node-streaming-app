@@ -1,6 +1,6 @@
 import express from 'express';
 import { auth } from '../middleware/auth.js';
-import { GetAllMovies, DeleteMovieById, GetMovieById, CreateMovies, UpdateMovieById, CreateMovie, GetLastMovies, GetMoviesByName} from './helper.js';
+import { GetAllMovies, DeleteMovieById, GetMovieById, CreateMovies, UpdateMovieById, CreateMovie, GetLastMovies, GetMoviesByName, GetAllAdminMovies} from './helper.js';
 import { Client } from '../index.js  ';
 const router=express.Router();
 
@@ -38,7 +38,19 @@ router.get("/last/10",auth,async function(request,response){
     response.send(movies);
 });
 
-
+//GET ALL Movies Pagination
+router.get("/page/movie/:pagenumber",auth,async function(request,response){
+    const {pagenumber}=request.params;
+    console.log(pagenumber);
+    //Get movie with name,rating
+    if(request.query.rating){
+        request.query.rating=+request.query.rating;
+    }
+    console.log(request.query)
+    const movies=await GetAllAdminMovies(request,pagenumber);
+    // console.log(movies);
+    response.send(movies);
+});
 
 //GET all Movies Count
 router.get("/Count/All",auth,async function(request,response){
