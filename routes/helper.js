@@ -53,7 +53,7 @@ export async function GetAllMovies(request) {
 export async function GetAllAdminMovies(request, pagenumber) {
   return await Client.db("Onstream-db")
     .collection("movies")
-    .find({})
+    .find(request.query)
     .limit(10)
     .skip((pagenumber - 1) * 10)
     .toArray();
