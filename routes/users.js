@@ -104,13 +104,13 @@ router.post("/forgotPassword", async function (request, response) {
   const UserFromDB = await getUserByname(email);
   console.log(UserFromDB);
   if (!UserFromDB) {
-    response.status(400).send({ message: "email not found " });
+    response.status(401).send({ message: "email not found " });
   } else if (UserFromDB.confirm === false) {
-    response.status(400).send({
+    response.status(401).send({
       message: "email is not verified. Please try to verrify first! ",
     });
   } else {
-    response.status(401).send({ message: "email Sent" });
+    response.status(200).send({ email, message: "email Sent" });
   }
 });
 
