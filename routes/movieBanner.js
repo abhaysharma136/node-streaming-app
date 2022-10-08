@@ -1,7 +1,9 @@
 import express from "express";
 import { auth } from "../middleware/auth.js";
 import {
+  CreateBanner,
   CreateBanners,
+  DeleteBannerById,
   GetAllBanners,
   GetBannerById,
   UpdateBannerById,
@@ -22,6 +24,31 @@ router.post("/", async function (request, response) {
   console.log(data);
   //db.movies.insertMany(data)
   const result = await CreateBanners(data);
+  // const movie=movies.find((mv)=>mv.id===id);
+
+  response.send(result);
+});
+
+//DELETE Banner with id
+router.delete("/:id", async function (request, response) {
+  const { id } = request.params;
+  console.log(request.params, id);
+  //db.collection.find({id:id})
+  const result = await DeleteBannerById(id);
+  // const movie=movies.find((mv)=>mv.id===id);
+  console.log(result);
+
+  result.deletedCount > 0
+    ? response.send({ msg: "Banner Succesfully Deleted" })
+    : response.status(404).send({ msg: "Movie not Found" });
+});
+
+//Create Banner
+router.post("/add", async function (request, response) {
+  const data = request.body;
+  console.log(data);
+  //db.movies.insertMany(data)
+  const result = await CreateBanner(data);
   // const movie=movies.find((mv)=>mv.id===id);
 
   response.send(result);

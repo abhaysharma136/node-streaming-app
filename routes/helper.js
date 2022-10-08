@@ -25,6 +25,10 @@ export async function CreateMovie(data) {
   return await Client.db("Onstream-db").collection("movies").insertOne(data);
 }
 
+export async function CreateBanner(data) {
+  return await Client.db("Onstream-db").collection("banners").insertOne(data);
+}
+
 export async function GetMovieById(id) {
   return await Client.db("Onstream-db")
     .collection("movies")
@@ -35,6 +39,12 @@ export async function DeleteMovieById(id) {
   return await Client.db("Onstream-db")
     .collection("movies")
     .deleteOne({ _id: ObjectId(id) });
+}
+
+export async function DeleteBannerById(id) {
+  return await Client.db("Onstream-db")
+    .collection("banners")
+    .deleteOne({ _id: id });
 }
 
 export async function DeleteuserById(id) {
