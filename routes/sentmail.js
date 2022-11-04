@@ -9,7 +9,7 @@ export async function sentEmail(receiver) {
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "abhaysharmajr@gmail.com",
+      user: "onstreamstreamings@gmail.com",
       pass: process.env.PASS,
     },
   });
@@ -23,7 +23,7 @@ export async function sentEmail(receiver) {
   );
 
   var mailOptions = {
-    from: "abhaysharmajr@gmail.com",
+    from: "onstreamstreamings@gmail.com",
     to: receiver,
     subject: "password change Email with Link",
     text: `Hi! There, You Forgot your password? We received a request to reset your password. Click on the link or Copy paste the URl in your browser.   http://prismatic-syrniki-2f6692.netlify.app/Onstream/forgotPassword/${receiver}/${token} The provided link will expire in 10 minutes. Thanks`,
@@ -52,7 +52,7 @@ export async function sentRegistrationEmail(receiver) {
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "abhaysharmajr@gmail.com",
+      user: "onstreamstreamings@gmail.com",
       pass: process.env.PASS,
     },
   });
@@ -66,7 +66,7 @@ export async function sentRegistrationEmail(receiver) {
   );
 
   var mailOptions = {
-    from: "abhaysharmajr@gmail.com",
+    from: "onstreamstreamings@gmail.com",
     to: receiver,
     subject: "Onstream Registration Confirmation",
     text: `Hi! There, You have recently visited our website and entered your email. Please follow the given link to verify your email below.   http://prismatic-syrniki-2f6692.netlify.app/Onstream/AccountConfirmation/${receiver}/${token} Thanks`,
