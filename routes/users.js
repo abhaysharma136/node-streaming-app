@@ -53,7 +53,7 @@ router.post("/signup", async function (request, response) {
       password: hashedPassword,
       FirstName: FirstName,
       LastName: LastName,
-      confirm: false,
+      confirm: true,
     });
     response.send({ result, email, message: "Email Sent to registered Email" });
   }
