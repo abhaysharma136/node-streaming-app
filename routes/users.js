@@ -54,6 +54,7 @@ router.post("/signup", async function (request, response) {
       FirstName: FirstName,
       LastName: LastName,
       confirm: true,
+      tasksArr: [],
     });
     response.send({ result, email, message: "Email Sent to registered Email" });
   }
