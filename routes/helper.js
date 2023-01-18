@@ -52,6 +52,13 @@ export async function DeleteMovieById(id) {
     .deleteOne({ _id: ObjectId(id) });
 }
 
+//Delete Task By Id
+export async function DeleteTaskById(id) {
+  return await Client.db("Onstream-db")
+    .collection("todoTasks")
+    .deleteOne({ _id: ObjectId(id) });
+}
+
 export async function DeleteBannerById(id) {
   return await Client.db("Onstream-db")
     .collection("banners")

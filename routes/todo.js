@@ -1,6 +1,11 @@
 import express from "express";
 import { auth } from "../middleware/auth.js";
-import { CreateTask, CreateTasks, GetAllTasks } from "./helper.js";
+import {
+  CreateTask,
+  CreateTasks,
+  DeleteTaskById,
+  GetAllTasks,
+} from "./helper.js";
 
 // import { Client } from "../index.js  ";
 const router = express.Router();
@@ -46,6 +51,20 @@ router.get("/", async function (request, response) {
   const movies = await GetAllTasks(request);
   // console.log(movies);
   response.send(movies);
+});
+
+//DELETE Task with id
+router.delete("/:id", async function (request, response) {
+  const { id } = request.params;
+  console.log(request.params, id);
+  //db.collection.find({id:id})
+  const result = await DeleteTaskById(id);
+  // const movie=movies.find((mv)=>mv.id===id);
+  console.log(result);
+
+  result.deletedCount > 0
+    ? response.send({ msg: "Task Succesfully Deleted" })
+    : response.status(404).send({ msg: "Task not Found" });
 });
 
 export const todoItemRouter = router;
