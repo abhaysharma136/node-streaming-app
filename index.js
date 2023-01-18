@@ -32,6 +32,5 @@ app.use("/movies", moviesRouter);
 app.use("/users", usersRouter);
 app.use("/email", emailRouter);
 app.use("/banners", moviesBannerRouter);
-app.use("/toDoTasks", todoRouter);
 
 app.listen(PORT, () => console.log(`App started in ${PORT}`));
