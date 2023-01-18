@@ -17,12 +17,23 @@ export async function CreateMovies(data) {
   return await Client.db("Onstream-db").collection("movies").insertMany(data);
 }
 
+//Query for creating todo tasks
+export async function CreateTasks(data) {
+  return await Client.db("Onstream-db")
+    .collection("todoTasks")
+    .insertMany(data);
+}
+
 export async function CreateBanners(data) {
   return await Client.db("Onstream-db").collection("banners").insertMany(data);
 }
 
 export async function CreateMovie(data) {
   return await Client.db("Onstream-db").collection("movies").insertOne(data);
+}
+//Query for creating single todo task
+export async function CreateTask(data) {
+  return await Client.db("Onstream-db").collection("todoTasks").insertOne(data);
 }
 
 export async function CreateBanner(data) {
@@ -59,6 +70,15 @@ export async function GetAllMovies(request) {
     .find(request.query)
     .toArray();
 }
+
+//GET All Tasks for user
+export async function GetAllTasks(request) {
+  return await Client.db("Onstream-db")
+    .collection("todoTasks")
+    .find(request.query)
+    .toArray();
+}
+
 //GET Movies with Limit
 export async function GetAllAdminMovies(request, pagenumber) {
   return await Client.db("Onstream-db")
