@@ -19,7 +19,6 @@ async function createConnection() {
   const Client = new MongoClient(Mongo_URL);
   await Client.connect();
   console.log("Mongo is COnnected🎊🎊🎊🎊");
-
   return Client;
 }
 export const Client = await createConnection();
