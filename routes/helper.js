@@ -91,6 +91,19 @@ export async function GetAllTasks(request) {
     .find(request.query)
     .toArray();
 }
+//GET Task By Id
+export async function GetTaskById(id) {
+  return await Client.db("Onstream-db")
+    .collection("todoTasks")
+    .findOne({ _id: ObjectId(id) });
+}
+
+//Update Task by Id
+export async function UpdateTaskById(id, data) {
+  return await Client.db("Onstream-db")
+    .collection("todoTasks")
+    .updateOne({ _id: ObjectId(id) }, { $set: data });
+}
 
 //GET Movies with Limit
 export async function GetAllAdminMovies(request, pagenumber) {
