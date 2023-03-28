@@ -21,7 +21,7 @@ async function createConnection() {
   console.log("Mongo is COnnected🎊🎊🎊🎊");
   return Client;
 }
-export const Client = createConnection();
+export const Client = await createConnection();
 
 //Welcome Response
 app.get("/", function (request, response) {
