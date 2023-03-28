@@ -177,7 +177,7 @@ export async function UpdateUserByEmail(email, data) {
     .collection("users")
     .updateOne({ email: email }, { $set: data });
 }
-
+//get banners by Id
 export async function GetBannerById(id) {
   return await Client.db("Onstream-db")
     .collection("banners")
