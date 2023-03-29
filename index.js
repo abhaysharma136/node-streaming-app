@@ -6,7 +6,6 @@ import cors from "cors";
 import { usersRouter } from "./routes/users.js";
 import { emailRouter } from "./routes/sentmail.js";
 import { moviesBannerRouter } from "./routes/movieBanner.js";
-// import { todoItemRouter } from "./routes/todo.js";
 
 dotenv.config();
 const app = express();
@@ -32,6 +31,5 @@ app.use("/movies", moviesRouter);
 app.use("/users", usersRouter);
 app.use("/email", emailRouter);
 app.use("/banners", moviesBannerRouter);
-// app.use("/todoItem", todoItemRouter);
 
 app.listen(PORT, () => console.log(`App started in ${PORT}`));

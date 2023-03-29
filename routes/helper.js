@@ -17,23 +17,12 @@ export async function CreateMovies(data) {
   return await Client.db("Onstream-db").collection("movies").insertMany(data);
 }
 
-//Query for creating todo tasks
-export async function CreateTasks(data) {
-  return await Client.db("Onstream-db")
-    .collection("todoTasks")
-    .insertMany(data);
-}
-
 export async function CreateBanners(data) {
   return await Client.db("Onstream-db").collection("banners").insertMany(data);
 }
 
 export async function CreateMovie(data) {
   return await Client.db("Onstream-db").collection("movies").insertOne(data);
-}
-//Query for creating single todo task
-export async function CreateTask(data) {
-  return await Client.db("Onstream-db").collection("todoTasks").insertOne(data);
 }
 
 export async function CreateBanner(data) {
@@ -49,19 +38,6 @@ export async function GetMovieById(id) {
 export async function DeleteMovieById(id) {
   return await Client.db("Onstream-db")
     .collection("movies")
-    .deleteOne({ _id: ObjectId(id) });
-}
-
-// //Delete Task By Id
-// export async function DeleteTaskById(id) {
-//   return await Client.db("Onstream-db")
-//     .collection("todoTasks")
-//     .deleteOne({ _id: ObjectId(id) });
-// }
-//Delete Task By Id
-export async function DeleteTaskById(id) {
-  return await Client.db("Onstream-db")
-    .collection("todoTasks")
     .deleteOne({ _id: ObjectId(id) });
 }
 
@@ -82,27 +58,6 @@ export async function GetAllMovies(request) {
     .collection("movies")
     .find(request.query)
     .toArray();
-}
-
-//GET All Tasks for user
-export async function GetAllTasks(request) {
-  return await Client.db("Onstream-db")
-    .collection("todoTasks")
-    .find(request.query)
-    .toArray();
-}
-//GET Task By Id
-export async function GetTaskById(id) {
-  return await Client.db("Onstream-db")
-    .collection("todoTasks")
-    .findOne({ _id: ObjectId(id) });
-}
-
-//Update Task by Id
-export async function UpdateTaskById(id, data) {
-  return await Client.db("Onstream-db")
-    .collection("todoTasks")
-    .updateOne({ _id: ObjectId(id) }, { $set: data });
 }
 
 //GET Movies with Limit
