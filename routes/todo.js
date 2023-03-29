@@ -73,13 +73,13 @@ router.get("/:id", async function (request, response) {
 });
 
 //GET all Tasks
-router.get("/", async function (request, response) {
-  //Get movie with name,rating
-  // console.log(request.query);
-  const movies = await GetAllTasks(request);
-  // console.log(movies);
-  response.send(movies);
-});
+// router.get("/", async function (request, response) {
+//   //Get movie with name,rating
+//   // console.log(request.query);
+//   const movies = await GetAllTasks(request);
+//   // console.log(movies);
+//   response.send(movies);
+// });
 
 //DELETE Task with id
 router.delete("/:id", async function (request, response) {
