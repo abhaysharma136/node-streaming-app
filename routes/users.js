@@ -63,6 +63,8 @@ router.post("/login", async function (request, response) {
   const { email, password } = request.body;
 
   const UserFromDB = await getUserByname(email);
+  const username = `${UserFromDB?.FirstName} ${UserFromDB?.LastName}`;
+  console.log("userName:", username);
   console.log(UserFromDB);
   if (!UserFromDB) {
     response.status(400).send({ message: "email does not match" });
@@ -79,6 +81,8 @@ router.post("/login", async function (request, response) {
           message: "Succesfull Admin Login",
           token: token,
           id: UserFromDB._id,
+          user_name: username,
+          email: UserFromDB?.email,
         });
       } else {
         response.status(401).send({ message: "Invalid Credentials" });
@@ -90,6 +94,8 @@ router.post("/login", async function (request, response) {
           message: "Succesfull Login",
           token: token,
           id: UserFromDB._id,
+          user_name: username,
+          email: UserFromDB?.email,
         });
       } else {
         response.status(401).send({ message: "Invalid Credentials" });
@@ -235,5 +241,107 @@ router.delete("/:id", async function (request, response) {
     ? response.send({ msg: "User Succesfully Deleted" })
     : response.status(404).send({ msg: "User not Found" });
 });
+
+
+
+// Add to your users router or create a new user-movies relationship
+
+// Add movie to user's liked movies
+router.post("/user/:userId/like/:movieId", auth, async function (request, response) {
+  const { userId, movieId } = request.params;
+  
+  try {
+    const user = await GetUserById(userId);
+    
+    if (!user) {
+      return response.status(404).send({ message: "User not Found" });
+    }
+    
+    // Initialize likedMovies array if it doesn't exist
+    if (!user.likedMovies) {
+      user.likedMovies = [];
+    }
+    
+    // Check if movie is already liked
+    const isAlreadyLiked = user.likedMovies.includes(movieId);
+    
+    if (isAlreadyLiked) {
+      // Remove from liked movies
+      user.likedMovies = user.likedMovies.filter(id => id !== movieId);
+    } else {
+      // Add to liked movies
+      user.likedMovies.push(movieId);
+    }
+    
+    const result = await UpdateUserById(userId, { likedMovies: user.likedMovies });
+    
+    response.send({ 
+      success: true, 
+      isLiked: !isAlreadyLiked,
+      likedMovies: user.likedMovies,
+      message: `Movie ${!isAlreadyLiked ? 'liked' : 'unliked'} successfully` 
+    });
+  } catch (error) {
+    response.status(500).send({ message: "Error updating like status", error: error.message });
+  }
+});
+
+// Add movie to user's watchlist
+router.post("/user/:userId/watchlist/:movieId", auth, async function (request, response) {
+  const { userId, movieId } = request.params;
+  
+  try {
+    const user = await GetUserById(userId);
+    
+    if (!user) {
+      return response.status(404).send({ message: "User not Found" });
+    }
+    
+    if (!user.watchlistMovies) {
+      user.watchlistMovies = [];
+    }
+    
+    const isInWatchlist = user.watchlistMovies.includes(movieId);
+    
+    if (isInWatchlist) {
+      user.watchlistMovies = user.watchlistMovies.filter(id => id !== movieId);
+    } else {
+      user.watchlistMovies.push(movieId);
+    }
+    
+    const result = await UpdateUserById(userId, { watchlistMovies: user.watchlistMovies });
+    
+    response.send({ 
+      success: true, 
+      inWatchlist: !isInWatchlist,
+      watchlistMovies: user.watchlistMovies,
+      message: `Movie ${!isInWatchlist ? 'added to' : 'removed from'} watchlist` 
+    });
+  } catch (error) {
+    response.status(500).send({ message: "Error updating watchlist", error: error.message });
+  }
+});
+
+// Get user's liked movies and watchlist
+router.get("/user/:userId/preferences", auth, async function (request, response) {
+  const { userId } = request.params;
+  
+  try {
+    const user = await GetUserById(userId);
+    
+    if (!user) {
+      return response.status(404).send({ message: "User not Found" });
+    }
+    
+    response.send({ 
+      likedMovies: user.likedMovies || [],
+      watchlistMovies: user.watchlistMovies || []
+    });
+  } catch (error) {
+    response.status(500).send({ message: "Error fetching user preferences", error: error.message });
+  }
+});
+
+
 
 export const usersRouter = router;

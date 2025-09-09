@@ -55,7 +55,7 @@ router.get("/page/movie/:pagenumber", auth, async function (request, response) {
   if (request.query.rating) {
     request.query.rating = +request.query.rating;
   }
-  console.log(request.query);
+  console.log("requestQuery",request.query);
   const movies = await GetAllAdminMovies(request, pagenumber);
   // console.log(movies);
   response.send(movies);

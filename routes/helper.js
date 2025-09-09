@@ -62,12 +62,31 @@ export async function GetAllMovies(request) {
 
 //GET Movies with Limit
 export async function GetAllAdminMovies(request, pagenumber) {
-  return await Client.db("Onstream-db")
+  const pageSize = 10;
+  const skip = (pagenumber - 1) * pageSize;
+
+  // Get total count of documents matching the query
+  const totalCount = await Client.db("Onstream-db")
+    .collection("movies")
+    .countDocuments(request.query);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  // Get paginated movies
+  const movies = await Client.db("Onstream-db")
     .collection("movies")
     .find(request.query)
-    .limit(10)
-    .skip((pagenumber - 1) * 10)
+    .limit(pageSize)
+    .skip(skip)
     .toArray();
+
+  return {
+    movies: movies,
+    totalPages: totalPages,
+    currentPage: parseInt(pagenumber),
+    totalCount: totalCount,
+  };
 }
 //Get Movies By Name
 export async function GetMoviesByName(name) {
