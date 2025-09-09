@@ -1,6 +1,5 @@
 import { ObjectId } from "mongodb";
-import { Client } from "../index.js  ";
-
+const Client = request.app.locals.mongoClient;
 export async function UpdateMovieById(id, data) {
   return await Client.db("Onstream-db")
     .collection("movies")

@@ -11,7 +11,7 @@ import {
   GetMoviesByName,
   GetAllAdminMovies,
 } from "./helper.js";
-import { Client } from "../index.js  ";
+const Client = request.app.locals.mongoClient;
 const router = express.Router();
 
 //GET all Movies
@@ -25,7 +25,6 @@ router.get("/", auth, async function (request, response) {
   // console.log(movies);
   response.send(movies);
 });
-
 
 //Search Movies Functionality
 router.get("/search/", auth, async function (request, response) {
@@ -56,7 +55,7 @@ router.get("/page/movie/:pagenumber", auth, async function (request, response) {
   if (request.query.rating) {
     request.query.rating = +request.query.rating;
   }
-  console.log("requestQuery",request.query);
+  console.log("requestQuery", request.query);
   const movies = await GetAllAdminMovies(request, pagenumber);
   // console.log(movies);
   response.send(movies);
