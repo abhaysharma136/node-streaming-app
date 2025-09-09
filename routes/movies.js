@@ -26,6 +26,7 @@ router.get("/", auth, async function (request, response) {
   response.send(movies);
 });
 
+
 //Search Movies Functionality
 router.get("/search/", auth, async function (request, response) {
   const { name } = request.query;
