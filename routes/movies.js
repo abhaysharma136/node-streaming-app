@@ -19,7 +19,7 @@ const getClient = (request) => {
 };
 
 //GET all Movies
-router.get("/", auth, async function (request, response) {
+router.get("/", async function (request, response) {
   const Client = getClient(request);
   //Get movie with name,rating
   if (request.query.rating) {
@@ -42,7 +42,7 @@ router.get("/search/", auth, async function (request, response) {
 });
 
 //GET LAST 10 Movies
-router.get("/last/10", auth, async function (request, response) {
+router.get("/last/10", async function (request, response) {
   const Client = getClient(request);
   //Get movie with name,rating
   if (request.query.rating) {
@@ -55,7 +55,7 @@ router.get("/last/10", auth, async function (request, response) {
 });
 
 //GET ALL Movies Pagination
-router.get("/page/movie/:pagenumber", auth, async function (request, response) {
+router.get("/page/movie/:pagenumber", async function (request, response) {
   const Client = getClient(request);
   const { pagenumber } = request.params;
   console.log(pagenumber);
@@ -70,7 +70,7 @@ router.get("/page/movie/:pagenumber", auth, async function (request, response) {
 });
 
 //GET all Movies Count
-router.get("/Count/All", auth, async function (request, response) {
+router.get("/Count/All", async function (request, response) {
   const Client = getClient(request);
   //Get movie with name,rating
   if (request.query.rating) {
