@@ -10,7 +10,28 @@ import { moviesBannerRouter } from "./routes/movieBanner.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:3000", // Local development
+  "https://your-netlify-app-url.netlify.app", // Replace with your Netlify URL
+  "https://your-app-name.vercel.app", // Replace with your Vercel URL if needed
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps, Postman, etc.)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 const Mongo_URL = process.env.Mongo_URL;
 const PORT = process.env.PORT || 9000;
 
@@ -28,6 +49,7 @@ async function initializeApp() {
 
     // Store client in app locals for use in routes
     app.locals.mongoClient = client;
+    app.options("*", cors());
 
     //Welcome Response
     app.get("/", function (request, response) {
