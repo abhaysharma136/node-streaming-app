@@ -9,10 +9,11 @@ import { moviesBannerRouter } from "./routes/movieBanner.js";
 
 dotenv.config();
 const app = express();
+app.options("*", cors());
 app.use(express.json());
 const allowedOrigins = [
   "http://localhost:3000", // Local development
-  "https://prismatic-syrniki-2f6692.netlify.app/", // Replace with your Netlify URL
+  "https://prismatic-syrniki-2f6692.netlify.app", // Replace with your Netlify URL
 ];
 
 app.use(
@@ -48,7 +49,6 @@ async function initializeApp() {
 
     // Store client in app locals for use in routes
     app.locals.mongoClient = client;
-    app.options("*", cors());
 
     //Welcome Response
     app.get("/", function (request, response) {
