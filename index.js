@@ -12,8 +12,7 @@ const app = express();
 app.use(express.json());
 const allowedOrigins = [
   "http://localhost:3000", // Local development
-  "https://your-netlify-app-url.netlify.app", // Replace with your Netlify URL
-  "https://your-app-name.vercel.app", // Replace with your Vercel URL if needed
+  "https://prismatic-syrniki-2f6692.netlify.app/", // Replace with your Netlify URL
 ];
 
 app.use(
