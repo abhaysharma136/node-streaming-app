@@ -12,7 +12,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { auth } from "../middleware/auth.js";
 const router = express.Router();
-const Client = request.app.locals.mongoClient;
+const getClient = (request) => {
+  return request.app.locals.mongoClient;
+};
 async function genHashedpassword(password) {
   const NO_OF_ROUND = 10;
   const salt = await bcrypt.genSalt(NO_OF_ROUND);
@@ -23,21 +25,23 @@ async function genHashedpassword(password) {
 
 //GET ALL User
 router.get("/", async function (request, response) {
+  const Client = getClient(request);
   //Get movie with name,rating
   // if(request.query.rating){
   //     request.query.rating=+request.query.rating;
   // }
   console.log(request.query);
-  const users = await GetAllUsers(request);
+  const users = await GetAllUsers(request, Client);
   // console.log(movies);
   response.send(users);
 });
 
 //Create User
 router.post("/signup", async function (request, response) {
+  const Client = getClient(request);
   const { email, password, FirstName, LastName } = request.body;
 
-  const UserFromDB = await getUserByname(email);
+  const UserFromDB = await getUserByname(email, Client);
   console.log(UserFromDB);
   if (UserFromDB) {
     response.status(400).send({ message: "email allready exists" });
@@ -47,21 +51,25 @@ router.post("/signup", async function (request, response) {
     const hashedPassword = await genHashedpassword(password);
     console.log(hashedPassword);
     //db.movies.insertOne(data)
-    const result = await CreateUser({
-      email: email,
-      password: hashedPassword,
-      FirstName: FirstName,
-      LastName: LastName,
-      confirm: false,
-    });
+    const result = await CreateUser(
+      {
+        email: email,
+        password: hashedPassword,
+        FirstName: FirstName,
+        LastName: LastName,
+        confirm: false,
+      },
+      Client
+    );
     response.send({ result, email, message: "Email Sent to registered Email" });
   }
 });
 
 router.post("/login", async function (request, response) {
+  const Client = getClient(request);
   const { email, password } = request.body;
 
-  const UserFromDB = await getUserByname(email);
+  const UserFromDB = await getUserByname(email, Client);
   const username = `${UserFromDB?.FirstName} ${UserFromDB?.LastName}`;
   console.log("userName:", username);
   console.log(UserFromDB);
@@ -104,9 +112,10 @@ router.post("/login", async function (request, response) {
 });
 //Forgot Password
 router.post("/forgotPassword", async function (request, response) {
+  const Client = getClient(request);
   const { email } = request.body;
 
-  const UserFromDB = await getUserByname(email);
+  const UserFromDB = await getUserByname(email, Client);
   console.log(UserFromDB);
   if (!UserFromDB) {
     response.status(401).send({ message: "email not found " });
@@ -121,9 +130,10 @@ router.post("/forgotPassword", async function (request, response) {
 
 //Check if provided email Exists, allready verified or notverified
 router.post("/verfyaccountstatus", async function (request, response) {
+  const Client = getClient(request);
   const { email } = request.body;
 
-  const UserFromDB = await getUserByname(email);
+  const UserFromDB = await getUserByname(email, Client);
   console.log(UserFromDB);
   if (!UserFromDB) {
     response
@@ -140,12 +150,13 @@ router.post("/verfyaccountstatus", async function (request, response) {
 
 //Update user data from Email
 router.put("/ConfirmAccount/:email", async function (request, response) {
+  const Client = getClient(request);
   const { email } = request.params;
 
   console.log(request.params, email);
   const data = request.body;
   //db.collection.UpdateOne({id:id},{$set:data})
-  const result = await UpdateUserByEmail(email, data);
+  const result = await UpdateUserByEmail(email, data, Client);
 
   console.log(result);
 
@@ -154,15 +165,20 @@ router.put("/ConfirmAccount/:email", async function (request, response) {
 
 //Update user password from Email
 router.put("/updatepassword/:email", async function (request, response) {
+  const Client = getClient(request);
   const { email } = request.params;
 
   console.log(request.params, email);
   const { password } = request.body;
   //db.collection.UpdateOne({id:id},{$set:data})
   const hashedPassword = await genHashedpassword(password);
-  const result = await UpdateUserByEmail(email, {
-    password: hashedPassword,
-  });
+  const result = await UpdateUserByEmail(
+    email,
+    {
+      password: hashedPassword,
+    },
+    Client
+  );
 
   console.log(result);
 
@@ -171,10 +187,11 @@ router.put("/updatepassword/:email", async function (request, response) {
 
 //Get User Data from Id
 router.get("/:id", async function (request, response) {
+  const Client = getClient(request);
   const { id } = request.params;
   console.log(request.params, id);
   //db.collection.find({id:id})
-  const user = await GetUserById(id);
+  const user = await GetUserById(id, Client);
   // const movie=movies.find((mv)=>mv.id===id);
   console.log(user);
 
@@ -185,6 +202,7 @@ router.get("/:id", async function (request, response) {
 
 //GET USER COUNT
 router.get("/Count/All", auth, async function (request, response) {
+  const Client = getClient(request);
   //Get movie with name,rating
 
   console.log(request.query);
@@ -203,11 +221,12 @@ router.get("/Count/All", auth, async function (request, response) {
 
 //Update User profile By ID
 router.put("/:id", async function (request, response) {
+  const Client = getClient(request);
   const { id } = request.params;
   console.log(request.params, id);
   const data = request.body;
   //db.collection.UpdateOne({id:id},{$set:data})
-  const result = await UpdateUserById(id, data);
+  const result = await UpdateUserById(id, data, Client);
 
   console.log(result);
 
@@ -216,9 +235,10 @@ router.put("/:id", async function (request, response) {
 
 //sent Registration email
 router.post("/newuser", async function (request, response) {
+  const Client = getClient(request);
   const { email } = request.body;
 
-  const UserFromDB = await getUserByname(email);
+  const UserFromDB = await getUserByname(email, Client);
   console.log(UserFromDB);
   if (UserFromDB) {
     response.status(400).send({ message: "email allready exists" });
@@ -229,10 +249,11 @@ router.post("/newuser", async function (request, response) {
 
 //DELETE User with id
 router.delete("/:id", async function (request, response) {
+  const Client = getClient(request);
   const { id } = request.params;
   console.log(request.params, id);
   //db.collection.find({id:id})
-  const result = await DeleteuserById(id);
+  const result = await DeleteuserById(id, Client);
   // const movie=movies.find((mv)=>mv.id===id);
   console.log(result);
 
@@ -248,10 +269,11 @@ router.post(
   "/user/:userId/like/:movieId",
   auth,
   async function (request, response) {
+    const Client = getClient(request);
     const { userId, movieId } = request.params;
 
     try {
-      const user = await GetUserById(userId);
+      const user = await GetUserById(userId, Client);
 
       if (!user) {
         return response.status(404).send({ message: "User not Found" });
@@ -273,9 +295,13 @@ router.post(
         user.likedMovies.push(movieId);
       }
 
-      const result = await UpdateUserById(userId, {
-        likedMovies: user.likedMovies,
-      });
+      const result = await UpdateUserById(
+        userId,
+        {
+          likedMovies: user.likedMovies,
+        },
+        Client
+      );
 
       response.send({
         success: true,
@@ -296,10 +322,11 @@ router.post(
   "/user/:userId/watchlist/:movieId",
   auth,
   async function (request, response) {
+    const Client = getClient(request);
     const { userId, movieId } = request.params;
 
     try {
-      const user = await GetUserById(userId);
+      const user = await GetUserById(userId, Client);
 
       if (!user) {
         return response.status(404).send({ message: "User not Found" });
@@ -319,9 +346,13 @@ router.post(
         user.watchlistMovies.push(movieId);
       }
 
-      const result = await UpdateUserById(userId, {
-        watchlistMovies: user.watchlistMovies,
-      });
+      const result = await UpdateUserById(
+        userId,
+        {
+          watchlistMovies: user.watchlistMovies,
+        },
+        Client
+      );
 
       response.send({
         success: true,
@@ -344,10 +375,11 @@ router.get(
   "/user/:userId/preferences",
   auth,
   async function (request, response) {
+    const Client = getClient(request);
     const { userId } = request.params;
 
     try {
-      const user = await GetUserById(userId);
+      const user = await GetUserById(userId, Client);
 
       if (!user) {
         return response.status(404).send({ message: "User not Found" });
@@ -358,12 +390,10 @@ router.get(
         watchlistMovies: user.watchlistMovies || [],
       });
     } catch (error) {
-      response
-        .status(500)
-        .send({
-          message: "Error fetching user preferences",
-          error: error.message,
-        });
+      response.status(500).send({
+        message: "Error fetching user preferences",
+        error: error.message,
+      });
     }
   }
 );

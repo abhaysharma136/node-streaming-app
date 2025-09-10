@@ -1,58 +1,58 @@
 import { ObjectId } from "mongodb";
-const Client = request.app.locals.mongoClient;
-export async function UpdateMovieById(id, data) {
+
+export async function UpdateMovieById(id, data, Client) {
   return await Client.db("Onstream-db")
     .collection("movies")
     .updateOne({ _id: ObjectId(id) }, { $set: data });
 }
 
-export async function UpdateBannerById(id, data) {
+export async function UpdateBannerById(id, data, Client) {
   return await Client.db("Onstream-db")
     .collection("banners")
     .updateOne({ _id: id }, { $set: data });
 }
 
-export async function CreateMovies(data) {
+export async function CreateMovies(data, Client) {
   return await Client.db("Onstream-db").collection("movies").insertMany(data);
 }
 
-export async function CreateBanners(data) {
+export async function CreateBanners(data, Client) {
   return await Client.db("Onstream-db").collection("banners").insertMany(data);
 }
 
-export async function CreateMovie(data) {
+export async function CreateMovie(data, Client) {
   return await Client.db("Onstream-db").collection("movies").insertOne(data);
 }
 
-export async function CreateBanner(data) {
+export async function CreateBanner(data, Client) {
   return await Client.db("Onstream-db").collection("banners").insertOne(data);
 }
 
-export async function GetMovieById(id) {
+export async function GetMovieById(id, Client) {
   return await Client.db("Onstream-db")
     .collection("movies")
     .findOne({ _id: ObjectId(id) });
 }
 
-export async function DeleteMovieById(id) {
+export async function DeleteMovieById(id, Client) {
   return await Client.db("Onstream-db")
     .collection("movies")
     .deleteOne({ _id: ObjectId(id) });
 }
 
-export async function DeleteBannerById(id) {
+export async function DeleteBannerById(id, Client) {
   return await Client.db("Onstream-db")
     .collection("banners")
     .deleteOne({ _id: id });
 }
 
-export async function DeleteuserById(id) {
+export async function DeleteuserById(id, Client) {
   return await Client.db("Onstream-db")
     .collection("users")
     .deleteOne({ _id: ObjectId(id) });
 }
 
-export async function GetAllMovies(request) {
+export async function GetAllMovies(request, Client) {
   return await Client.db("Onstream-db")
     .collection("movies")
     .find(request.query)
@@ -60,7 +60,7 @@ export async function GetAllMovies(request) {
 }
 
 //GET Movies with Limit
-export async function GetAllAdminMovies(request, pagenumber) {
+export async function GetAllAdminMovies(request, pagenumber, Client) {
   const pageSize = 10;
   const skip = (pagenumber - 1) * pageSize;
 
@@ -88,21 +88,21 @@ export async function GetAllAdminMovies(request, pagenumber) {
   };
 }
 //Get Movies By Name
-export async function GetMoviesByName(name) {
+export async function GetMoviesByName(name, Client) {
   return await Client.db("Onstream-db")
     .collection("movies")
     .find({ name: { $regex: ".*" + name + ".*", $options: "i" } })
     .toArray();
 }
 
-export async function GetAllBanners(request) {
+export async function GetAllBanners(request, Client) {
   return await Client.db("Onstream-db")
     .collection("banners")
     .find({})
     .toArray();
 }
 
-export async function GetLastMovies(request) {
+export async function GetLastMovies(request, Client) {
   return await Client.db("Onstream-db")
     .collection("movies")
     .find(request.query)
@@ -112,7 +112,7 @@ export async function GetLastMovies(request) {
   // db.yourcollectionname.find({$query: {}, $orderby: {$natural : -1}}).limit(yournumber)
 }
 
-export async function GetAllUsers(request) {
+export async function GetAllUsers(request, Client) {
   return await Client.db("Onstream-db")
     .collection("users")
     .find(request.query)
@@ -123,35 +123,35 @@ export async function GetAllUsers(request) {
 //         .db("Onstream-db")
 //         .collection("movies")
 // }
-export async function CreateUser(data) {
+export async function CreateUser(data, Client) {
   return await Client.db("Onstream-db").collection("users").insertOne(data);
 }
 
-export async function getUserByname(email) {
+export async function getUserByname(email, Client) {
   return await Client.db("Onstream-db")
     .collection("users")
     .findOne({ email: email });
 }
 
-export async function GetUserById(id) {
+export async function GetUserById(id, Client) {
   return await Client.db("Onstream-db")
     .collection("users")
     .findOne({ _id: ObjectId(id) });
 }
 
-export async function UpdateUserById(id, data) {
+export async function UpdateUserById(id, data, Client) {
   return await Client.db("Onstream-db")
     .collection("users")
     .updateOne({ _id: ObjectId(id) }, { $set: data });
 }
 
-export async function UpdateUserByEmail(email, data) {
+export async function UpdateUserByEmail(email, data, Client) {
   return await Client.db("Onstream-db")
     .collection("users")
     .updateOne({ email: email }, { $set: data });
 }
 //get banners by Id
-export async function GetBannerById(id) {
+export async function GetBannerById(id, Client) {
   return await Client.db("Onstream-db")
     .collection("banners")
     .findOne({ _id: id });
