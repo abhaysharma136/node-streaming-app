@@ -12,7 +12,7 @@ const app = express();
 app.options("*", cors());
 app.use(express.json());
 const allowedOrigins = [
-  "http://localhost:3000", // Local development
+  "http://localhost:5173", // Local development
   "https://prismatic-syrniki-2f6692.netlify.app", // Replace with your Netlify URL
 ];
 

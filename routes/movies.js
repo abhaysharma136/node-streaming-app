@@ -107,6 +107,7 @@ router.delete("/:id", async function (request, response) {
 
 //Get Movie By Id
 router.get("/:id", async function (request, response) {
+  const Client = getClient(request);
   const { id } = request.params;
   console.log(request.params, id);
   //db.collection.find({id:id})
